@@ -1,0 +1,29 @@
+HTTrack3.49-2+htsswf+htsjava launched on Mon, 26 Dec 2022 21:07:55 at http://frontend.big-skins.com/goodwin-html-demo/ +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" http://frontend.big-skins.com/goodwin-html-demo/ -O1 "C:\My Web Sites\goodwin" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+21:41:54	Warning: 	Retry after error -4 (Incorrect length (176628 Bytes, 281969 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/home-nutrition/slider/slide-nutrition1.jpg (from frontend.big-skins.com/goodwin-html-demo/index-nutrition.html)
+21:41:54	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/slider/slide-watches3-mobile.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:54	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/slider/slide-watches1.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:54	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/slider/slide-watches2-mobile.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:54	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/slider/slide-watches2.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:55	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/slider/slide-watches3.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:55	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/collection-women.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:55	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/collection-men.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:55	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/coming-soon-bg.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:41:55	Error: 	"Not Found" (404) at link frontend.big-skins.com/goodwin-html-demo/images/home-watÑhes/instagram-right-img.jpg (from frontend.big-skins.com/goodwin-html-demo/index-watches.html)
+21:42:11	Warning: 	Retry after error -2 (Receive Time Out) at link frontend.big-skins.com/goodwin-html-demo/images/home-tshirts//banner-tshirts-05.png (from frontend.big-skins.com/goodwin-html-demo/index-tshirts.html)
+21:42:20	Warning: 	Retry after error -2 (Receive Time Out) at link frontend.big-skins.com/goodwin-html-demo/images/home-plumbing/slider/slide-plumbing1.jpg (from frontend.big-skins.com/goodwin-html-demo/index-plumbing.html)
+21:42:20	Warning: 	Retry after error -4 (Incorrect length (183716 Bytes, 351023 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/home-plumbing/slider/slide-plumbing2.jpg (from frontend.big-skins.com/goodwin-html-demo/index-plumbing.html)
+21:42:32	Warning: 	Retry after error -4 (Incorrect length (791058 Bytes, 891382 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/gallery/gallery-thumb-1.png (from frontend.big-skins.com/goodwin-html-demo/gallery.html)
+21:42:48	Warning: 	Retry after error -4 (Incorrect length (951677 Bytes, 1037830 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/gallery/gallery-thumb-3.png (from frontend.big-skins.com/goodwin-html-demo/gallery.html)
+21:42:50	Warning: 	Retry after error -4 (Incorrect length (980122 Bytes, 1104600 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/gallery/gallery-thumb-5.png (from frontend.big-skins.com/goodwin-html-demo/gallery.html)
+21:43:03	Warning: 	Retry after error -4 (Incorrect length (1776479 Bytes, 1940244 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/home-fashion3/slide3-mobile.png (from frontend.big-skins.com/goodwin-html-demo/index-fashion-3.html)
+21:43:03	Warning: 	Retry after error -4 (Incorrect length (307074 Bytes, 458344 expected)) at link frontend.big-skins.com/goodwin-html-demo/images/home-fashion3/category-fashion3-3.png (from frontend.big-skins.com/goodwin-html-demo/index-fashion-3.html)
+
+HTTrack Website Copier/3.49-2 mirror complete in 35 minutes 44 seconds : 474 links scanned, 455 files written (57302456 bytes overall) [43993423 bytes received at 20519 bytes/sec], 15228323 bytes transferred using HTTP compression in 96 files, ratio 11%, 1.6 requests per connection
+(9 errors, 9 warnings, 0 messages)
