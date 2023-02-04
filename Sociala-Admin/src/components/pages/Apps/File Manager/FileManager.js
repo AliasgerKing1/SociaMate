@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { addFolderFunction, getFolderFunction } from '../../../../Redux/FolderReducer';
+import {useDispatch,useSelector} from "react-redux"
+
+import { addFolder, getFolder } from '../../../../Services/Storage/FolderService';
+
 import Header from '../../../shared/Header/Header';
 import Footer from '../../../shared/Footer/Footer';
 import NotificationModel from "../../../shared/NotificationModel/NotificationModel";
 import RightMenu from '../../../shared/RightMenu/RightMenu';
 import ChooseLayout from "../../../shared/ChooseLayout/ChooseLayout";
 const FileManager = () => {
+    let dispatch = useDispatch();
+    let state = useSelector(state=>state.FolderReducer)
+    let [folderName, setFolderName] = useState({
+        folder_name : "",
+        data : []
+    });
+    console.log(state)
+let getFolderData = async() => {
+let result = await getFolder();
+dispatch(getFolderFunction(result.data));
+}
+useEffect(()=> {
+    if(state.length == 0) {
+        getFolderData();
+    }
+}, [])
+    let folderSubmit = async() => {
+let result = await addFolder(folderName);
+console.log(result.data)
+dispatch(addFolderFunction(folderName));
+    }
   return (
     <>
 
@@ -133,12 +161,15 @@ const FileManager = () => {
                                     </div>
                                     {/* <!--end row--> */}
                                     <div className="row" id="folderlist-data">
-                                        <div className="col-xxl-3 col-6 folder-card">
+                                    {
+                                        state.map((x,i)=> {
+                                            return(
+                                                <div className="col-xxl-3 col-6 folder-card">
                                             <div className="card bg-light shadow-none" id="folder-1">
                                                 <div className="card-body">
                                                     <div className="d-flex mb-1">
                                                         <div className="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                                            <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_1" checked />
+                                                            <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_1" />
                                                             <label className="form-check-label" htmlFor="folderlistCheckbox_1"></label>
                                                         </div>
                                                         <div className="dropdown">
@@ -157,7 +188,7 @@ const FileManager = () => {
                                                         <div className="mb-2">
                                                             <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                                         </div>
-                                                        <h6 className="fs-15 folder-name">Projects</h6>
+                                                        <h6 className="fs-15 folder-name">{x.folder_name}</h6>
                                                     </div>
                                                     <div className="hstack mt-4 text-muted">
                                                         <span className="me-auto"><b>349</b> Files</span>
@@ -166,107 +197,10 @@ const FileManager = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <!--end col--> */}
-                                        <div className="col-xxl-3 col-6 folder-card">
-                                            <div className="card bg-light shadow-none" id="folder-2">
-                                                <div className="card-body">
-                                                    <div className="d-flex mb-1">
-                                                        <div className="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                                            <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_2" />
-                                                            <label className="form-check-label" htmlFor="folderlistCheckbox_2"></label>
-                                                        </div>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i className="ri-more-2-fill fs-16 align-bottom"></i>
-                                                            </button>
-                                                            <ul className="dropdown-menu dropdown-menu-end">
-                                                                <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
-                                                                <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
-                                                                <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button">Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
+                                            )
+                                        })
+                                    }
 
-                                                    <div className="text-center">
-                                                        <div className="mb-2">
-                                                            <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                                        </div>
-                                                        <h6 className="fs-15 folder-name">Documents</h6>
-                                                    </div>
-                                                    <div className="hstack mt-4 text-muted">
-                                                        <span className="me-auto"><b>2348</b> Files</span>
-                                                        <span><b>27.01</b>GB</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* <!--end col--> */}
-                                        <div className="col-xxl-3 col-6 folder-card">
-                                            <div className="card bg-light shadow-none" id="folder-3">
-                                                <div className="card-body">
-                                                    <div className="d-flex mb-1">
-                                                        <div className="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                                            <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_3" />
-                                                            <label className="form-check-label" htmlFor="folderlistCheckbox_3"></label>
-                                                        </div>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i className="ri-more-2-fill fs-16 align-bottom"></i>
-                                                            </button>
-                                                            <ul className="dropdown-menu dropdown-menu-end">
-                                                                <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
-                                                                <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
-                                                                <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button">Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="text-center">
-                                                        <div className="mb-2">
-                                                            <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                                        </div>
-                                                        <h6 className="fs-15 folder-name">Media</h6>
-                                                    </div>
-                                                    <div className="hstack mt-4 text-muted">
-                                                        <span className="me-auto"><b>12480</b> Files</span>
-                                                        <span><b>20.87</b>GB</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* <!--end col--> */}
-                                        <div className="col-xxl-3 col-6 folder-card">
-                                            <div className="card bg-light shadow-none" id="folder-4">
-                                                <div className="card-body">
-                                                    <div className="d-flex mb-1">
-                                                        <div className="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-                                                            <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_4" checked />
-                                                            <label className="form-check-label" htmlFor="folderlistCheckbox_4"></label>
-                                                        </div>
-                                                        <div className="dropdown">
-                                                            <button className="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i className="ri-more-2-fill fs-16 align-bottom"></i>
-                                                            </button>
-                                                            <ul className="dropdown-menu dropdown-menu-end">
-                                                                <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
-                                                                <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
-                                                                <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button">Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div className="text-center">
-                                                        <div className="mb-2">
-                                                            <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
-                                                        </div>
-                                                        <h6 className="fs-15 folder-name">Velzon v1.7.0</h6>
-                                                    </div>
-                                                    <div className="hstack mt-4 text-muted">
-                                                        <span className="me-auto"><b>180</b> Files</span>
-                                                        <span><b>478.65</b>MB</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         {/* <!--end col--> */}
                                     </div>
                                     {/* <!--end row--> */}
@@ -279,25 +213,12 @@ const FileManager = () => {
                                         </div>
                                     </div>
                                     <div className="table-responsive">
-                                        {/* <table className="table align-middle table-nowrap mb-0">
-                                            <thead className="table-active">
-                                                <tr>
-                                                    <th scope="col">Name</th>
-                                                    <th scope="col">File Item</th>
-                                                    <th scope="col">File Size</th>
-                                                    <th scope="col">Recent Date</th>
-                                                    <th scope="col" className="text-center">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="file-list">
 
-                                            </tbody>
-                                        </table> */}
-                                        <div class="card">
-                                <div class="card-body">
-                                    <div class="live-preview">
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless align-middle table-nowrap mb-0">
+                                        <div className="card">
+                                <div className="card-body">
+                                    <div className="live-preview">
+                                        <div className="table-responsive">
+                                            <table className="table table-borderless align-middle table-nowrap mb-0">
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">ID</th>
@@ -310,54 +231,54 @@ const FileManager = () => {
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td class="fw-medium">01</td>
-                                                        <td><i class="ri-gallery-fill align-bottom text-success"></i> Annette Black</td>
+                                                        <td className="fw-medium">01</td>
+                                                        <td><i className="ri-gallery-fill align-bottom text-success me-2"></i> Annette Black</td>
                                                         <td>Industrial Designer</td>
                                                         <td>10, Nov 2021</td>
-                                                        <td><span class="badge badge-soft-success">Active</span></td>
+                                                        <td><span className="badge badge-soft-success">Active</span></td>
                                                         <td>
-                                                            <div class="hstack gap-3 fs-15">
-                                                                <a href="#;" class="link-primary"><i class="ri-settings-4-line"></i></a>
-                                                                <a href="#;" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                            <div className="hstack gap-3 fs-15">
+                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="fw-medium">02</td>
-                                                        <td>Bessie Cooper</td>
+                                                        <td className="fw-medium">02</td>
+                                                        <td><i className="ri-file-pdf-fill align-bottom text-danger me-2"></i> Bessie Cooper</td>
                                                         <td>Graphic Designer</td>
                                                         <td>13, Nov 2021</td>
-                                                        <td><span class="badge badge-soft-success">Active</span></td>
+                                                        <td><span className="badge badge-soft-success">Active</span></td>
                                                         <td>
-                                                            <div class="hstack gap-3 fs-15">
-                                                                <a href="#;" class="link-primary"><i class="ri-settings-4-line"></i></a>
-                                                                <a href="#;" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                            <div className="hstack gap-3 fs-15">
+                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="fw-medium">03</td>
-                                                        <td>Leslie Alexander</td>
+                                                        <td className="fw-medium">03</td>
+                                                        <td><i className="ri-folder-2-fill align-bottom text-warning me-2"></i>Leslie Alexander</td>
                                                         <td>Product Manager</td>
                                                         <td>17, Nov 2021</td>
-                                                        <td><span class="badge badge-soft-success">Active</span></td>
+                                                        <td><span className="badge badge-soft-success">Active</span></td>
                                                         <td>
-                                                            <div class="hstack gap-3 fs-15">
-                                                                <a href="#;" class="link-primary"><i class="ri-settings-4-line"></i></a>
-                                                                <a href="#;" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                            <div className="hstack gap-3 fs-15">
+                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="fw-medium">04</td>
-                                                        <td>Lenora Sandoval</td>
+                                                        <td className="fw-medium">04</td>
+                                                        <td><i className="ri-file-text-fill align-bottom text-secondary me-2"></i>Lenora Sandoval</td>
                                                         <td>Applications Engineer</td>
                                                         <td>25, Nov 2021</td>
-                                                        <td><span class="badge badge-soft-danger">Disabled</span></td>
+                                                        <td><span className="badge badge-soft-danger">Disabled</span></td>
                                                         <td>
-                                                            <div class="hstack gap-3 fs-15">
-                                                                <a href="#;" class="link-primary"><i class="ri-settings-4-line"></i></a>
-                                                                <a href="#;" class="link-danger"><i class="ri-delete-bin-5-line"></i></a>
+                                                            <div className="hstack gap-3 fs-15">
+                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -365,74 +286,75 @@ const FileManager = () => {
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="d-none code-view">
-                                        <pre class="language-markup" style={{height: '275px'}}><code>&lt;!-- Tables Without Borders --&gt;
-&lt;table class=&quot;table table-borderless table-nowrap&quot;&gt;
-    &lt;thead&gt;
-        &lt;tr&gt;
-            &lt;th scope=&quot;col&quot;&gt;Id&lt;/th&gt;
-            &lt;th scope=&quot;col&quot;&gt;Name&lt;/th&gt;
-            &lt;th scope=&quot;col&quot;&gt;Job Title&lt;/th&gt;
-            &lt;th scope=&quot;col&quot;&gt;Date&lt;/th&gt;
-            &lt;th scope=&quot;col&quot;&gt;Status&lt;/th&gt;
-            &lt;th scope=&quot;col&quot;&gt;&lt;/th&gt;
-        &lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-        &lt;tr&gt;
-            &lt;th scope=&quot;row&quot;&gt;1&lt;/th&gt;
-            &lt;td&gt;Annette Black&lt;/td&gt;
-            &lt;td&gt;Industrial Designer&lt;/td&gt;
-            &lt;td&gt;10, Nov 2021&lt;/td&gt;
-            &lt;td&gt;&lt;span class=&quot;badge badge-soft-success&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
-            &lt;td&gt;
-                &lt;div class=&quot;hstack gap-3 fs-15&quot;&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-primary&quot;&gt;&lt;i class=&quot;ri-settings-4-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-danger&quot;&gt;&lt;i class=&quot;ri-delete-bin-5-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;th scope=&quot;row&quot;&gt;2&lt;/th&gt;
-            &lt;td&gt;Bessie Cooper&lt;/td&gt;
-            &lt;td&gt;Graphic Designer&lt;/td&gt;
-            &lt;td&gt;13, Nov 2021&lt;/td&gt;
-            &lt;td&gt;&lt;span class=&quot;badge badge-soft-success&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
-            &lt;td&gt;
-                &lt;div class=&quot;hstack gap-3 fs-15&quot;&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-primary&quot;&gt;&lt;i class=&quot;ri-settings-4-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-danger&quot;&gt;&lt;i class=&quot;ri-delete-bin-5-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;th scope=&quot;row&quot;&gt;3&lt;/th&gt;
-            &lt;td&gt;Leslie Alexander&lt;/td&gt;
-            &lt;td&gt;Product Manager&lt;/td&gt;
-            &lt;td&gt;17, Nov 2021&lt;/td&gt;
-            &lt;td&gt;&lt;span class=&quot;badge badge-soft-success&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
-            &lt;td&gt;
-                &lt;div class=&quot;hstack gap-3 fs-15&quot;&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-primary&quot;&gt;&lt;i class=&quot;ri-settings-4-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-danger&quot;&gt;&lt;i class=&quot;ri-delete-bin-5-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;th scope=&quot;row&quot;&gt;4&lt;/th&gt;
-            &lt;td&gt;Lenora Sandoval&lt;/td&gt;
-            &lt;td&gt;Applications Engineer&lt;/td&gt;
-            &lt;td&gt;25, Nov 2021&lt;/td&gt;
-            &lt;td&gt;&lt;span class=&quot;badge badge-soft-danger&quot;&gt;Disabled&lt;/span&gt;&lt;/td&gt;
-            &lt;td&gt;
-                &lt;div class=&quot;hstack gap-3 fs-15&quot;&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-primary&quot;&gt;&lt;i class=&quot;ri-settings-4-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                    &lt;a href=&quot;#;&quot; class=&quot;link-danger&quot;&gt;&lt;i class=&quot;ri-delete-bin-5-line&quot;&gt;&lt;/i&gt;&lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/tbody&gt;
-&lt;/table&gt;</code></pre>
+                                    <div className="d-none code-view">
+                                        <pre className="language-markup" style={{height: '275px'}}><code>
+                                        {/* <!-- Tables Without Borders --> */}
+<table className="table table-borderless table-nowrap">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Job Title</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Annette Black</td>
+            <td>Industrial Designer</td>
+            <td>10, Nov 2021</td>
+            <td><span className="badge badge-soft-success">Active</span></td>
+            <td>
+                <div className="hstack gap-3 fs-15">
+                    <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                    <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Bessie Cooper</td>
+            <td>Graphic Designer</td>
+            <td>13, Nov 2021</td>
+            <td><span className="badge badge-soft-success">Active</span></td>
+            <td>
+                <div className="hstack gap-3 fs-15">
+                    <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                    <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Leslie Alexander</td>
+            <td>Product Manager</td>
+            <td>17, Nov 2021</td>
+            <td><span className="badge badge-soft-success">Active</span></td>
+            <td>
+                <div className="hstack gap-3 fs-15">
+                    <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                    <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>Lenora Sandoval</td>
+            <td>Applications Engineer</td>
+            <td>25, Nov 2021</td>
+            <td><span className="badge badge-soft-danger">Disabled</span></td>
+            <td>
+                <div className="hstack gap-3 fs-15">
+                    <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                    <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table></code></pre>
                                     </div>
                                 </div>
                                 {/* <!-- end card-body --> */}
@@ -651,7 +573,7 @@ const FileManager = () => {
             {/* <!-- End Page-content --> */}
 
             {/* <!-- START CREATE FOLDER MODAL --> */}
-            <div className="modal fade zoomIn" id="createFolderModal" tabindex="-1" aria-labelledby="createFolderModalLabel" aria-hidden="true">
+            <div className="modal fade zoomIn" id="createFolderModal" tabIndex="-1" aria-labelledby="createFolderModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content border-0">
                         <div className="modal-header p-3 bg-soft-success">
@@ -659,16 +581,16 @@ const FileManager = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" id="addFolderBtn-close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form autocomplete="off" className="needs-validation createfolder-form" id="createfolder-form" novalidate>
+                            <form autoComplete="off" className="needs-validation createfolder-form" id="createfolder-form" noValidate>
                                 <div className="mb-4">
                                     <label htmlFor="foldername-input" className="form-label">Folder Name</label>
-                                    <input type="text" className="form-control" id="foldername-input" required placeholder="Enter folder name" />
+                                    <input type="text" className="form-control" id="foldername-input" placeholder="Enter folder name" onChange={(e)=> setFolderName({...folderName,folder_name : e.target.value})} value={folderName.folder_name}/>
                                     <div className="invalid-feedback">Please enter a folder name.</div>
-                                    <input type="hidden" className="form-control" id="folderid-input" value="" placeholder="Enter folder name" />
+                                    {/* <input type="hidden" className="form-control" id="folderid-input" value="" placeholder="Enter folder name" /> */}
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
                                     <button type="button" className="btn btn-ghost-success" data-bs-dismiss="modal"><i className="ri-close-line align-bottom"></i> Close</button>
-                                    <button type="submit" className="btn btn-primary" id="addNewFolder">Add Folder</button>
+                                    <a style={{cursor : "pointer"}} type="submit" className="btn btn-primary" id="addNewFolder" onClick={folderSubmit}>Add Folder</a>
                                 </div>
                             </form>
                         </div>
@@ -678,7 +600,7 @@ const FileManager = () => {
             {/* <!-- END CREATE FOLDER MODAL --> */}
 
             {/* <!-- START CREATE FILE MODAL --> */}
-            <div className="modal fade zoomIn" id="createFileModal" tabindex="-1" aria-labelledby="createFileModalLabel" aria-hidden="true">
+            <div className="modal fade zoomIn" id="createFileModal" tabIndex="-1" aria-labelledby="createFileModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content border-0">
                         <div className="modal-header p-3 bg-soft-success">
@@ -686,7 +608,7 @@ const FileManager = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" id="addFileBtn-close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form autocomplete="off" className="needs-validation createfile-form" id="createfile-form" novalidate>
+                            <form autoComplete="off" className="needs-validation createfile-form" id="createfile-form" noValidate>
                                 <div className="mb-4">
                                     <label htmlFor="filename-input" className="form-label">File Name</label>
                                     <input type="text" className="form-control" id="filename-input" value="" required placeholder="Enter file name" />
@@ -705,7 +627,7 @@ const FileManager = () => {
             {/* <!-- END CREATE FILE MODAL --> */}
 
             {/* <!-- removeFileItemModal --> */}
-            <div id="removeFileItemModal" className="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+            <div id="removeFileItemModal" className="modal fade zoomIn" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -732,7 +654,7 @@ const FileManager = () => {
             {/* <!-- /.modal --> */}
 
             {/* <!-- removeFileItemModal --> */}
-            <div id="removeFolderModal" className="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+            <div id="removeFolderModal" className="modal fade zoomIn" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">

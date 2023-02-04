@@ -7,6 +7,7 @@ import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import UserReducer from './Redux/UserReducer';
 import AdminReducer from './Redux/AdminReducer';
 import TaskDetailsReducer from './Redux/TaskDetailsReducer';
+import FolderReducer from './Redux/FolderReducer';
 
 import SocialaAdminRoutes from './routes/SocialaAdminRoutes';
 import { getAdminProfile } from './Services/AdminService/AdminService';
@@ -15,7 +16,8 @@ import {getPhoto } from "./Services/ProfilePhotoService/ProfilePhotoService";
 let rootReducer = combineReducers({
   UserReducer,
   AdminReducer,
-  TaskDetailsReducer
+  TaskDetailsReducer,
+  FolderReducer
 })
 let store = configureStore({
 reducer : rootReducer
