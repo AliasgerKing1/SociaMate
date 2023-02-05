@@ -9,5 +9,8 @@ let getFolder = () => {
     return axios.get(apiUrl);
 }
 
+let deleteFolder = (id) => {
+    return axios.delete(apiUrl + "/" + id);
+}
 
-export {addFolder,getFolder}
+export {addFolder,getFolder,deleteFolder}

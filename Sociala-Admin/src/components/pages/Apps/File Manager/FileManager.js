@@ -1,24 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import {useFormik} from "formik";
 
-import { addFolderFunction, getFolderFunction } from '../../../../Redux/FolderReducer';
+import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../../../../Redux/FolderReducer';
 import {useDispatch,useSelector} from "react-redux"
 
-import { addFolder, getFolder } from '../../../../Services/Storage/FolderService';
+import { addFolder, getFolder,deleteFolder } from '../../../../Services/Storage/FolderService';
+
+import FormErrors from "../../../shared/Errors/FormErrors"
 
 import Header from '../../../shared/Header/Header';
 import Footer from '../../../shared/Footer/Footer';
 import NotificationModel from "../../../shared/NotificationModel/NotificationModel";
 import RightMenu from '../../../shared/RightMenu/RightMenu';
 import ChooseLayout from "../../../shared/ChooseLayout/ChooseLayout";
+import FolderSchema from '../../../../Schemas/AddFolderSchema';
+
+const initialValues = {
+    folder_name : "",
+        data : []
+}
 const FileManager = () => {
     let dispatch = useDispatch();
     let state = useSelector(state=>state.FolderReducer)
-    let [folderName, setFolderName] = useState({
-        folder_name : "",
-        data : []
-    });
-    console.log(state)
+    let [folderToDelete, setFolderToDelete] = useState();
+    let {values, handleBlur,handleChange,handleSubmit,touched,errors} = useFormik({
+        initialValues : initialValues,
+        validationSchema : FolderSchema,
+        onSubmit : ()=> {
+ addFolder(values).then(result=> {
+                dispatch(addFolderFunction(result.data));
+            });
+        }
+        })
 let getFolderData = async() => {
 let result = await getFolder();
 dispatch(getFolderFunction(result.data));
@@ -28,11 +42,14 @@ useEffect(()=> {
         getFolderData();
     }
 }, [])
-    let folderSubmit = async() => {
-let result = await addFolder(folderName);
-console.log(result.data)
-dispatch(addFolderFunction(folderName));
-    }
+
+let confirmDelete = (folder) => {
+setFolderToDelete(folder);
+}
+let removeFolder = async() => {
+let result = await deleteFolder(folderToDelete._id);
+dispatch(deleteFolderFunction(result.data));
+}
   return (
     <>
 
@@ -164,7 +181,7 @@ dispatch(addFolderFunction(folderName));
                                     {
                                         state.map((x,i)=> {
                                             return(
-                                                <div className="col-xxl-3 col-6 folder-card">
+                                                <div className="col-xxl-3 col-6 folder-card" key={i}>
                                             <div className="card bg-light shadow-none" id="folder-1">
                                                 <div className="card-body">
                                                     <div className="d-flex mb-1">
@@ -179,7 +196,7 @@ dispatch(addFolderFunction(folderName));
                                                             <ul className="dropdown-menu dropdown-menu-end">
                                                                 <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
                                                                 <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
-                                                                <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button">Delete</a></li>
+                                                                <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button" onClick={()=> confirmDelete(x)}>Delete</a></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -581,16 +598,18 @@ dispatch(addFolderFunction(folderName));
                             <button type="button" className="btn-close" data-bs-dismiss="modal" id="addFolderBtn-close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form autoComplete="off" className="needs-validation createfolder-form" id="createfolder-form" noValidate>
+                            <form autoComplete="off" className="needs-validation createfolder-form" id="createfolder-form" onSubmit={handleSubmit}>
                                 <div className="mb-4">
                                     <label htmlFor="foldername-input" className="form-label">Folder Name</label>
-                                    <input type="text" className="form-control" id="foldername-input" placeholder="Enter folder name" onChange={(e)=> setFolderName({...folderName,folder_name : e.target.value})} value={folderName.folder_name}/>
-                                    <div className="invalid-feedback">Please enter a folder name.</div>
+                                    <input type="text" name='folder_name' className= {"form-control " + (errors.folder_name && touched.folder_name? "is-invalid" : "")} onBlur={handleBlur} id="foldername-input" placeholder="Enter folder name" onChange={handleChange}/>
+                                    <FormErrors errMsg={errors.folder_name} touched={touched.folder_name}/>
+                                    {/* setFolderName({...folderName,folder_name : e.target.value}) */}
                                     {/* <input type="hidden" className="form-control" id="folderid-input" value="" placeholder="Enter folder name" /> */}
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
                                     <button type="button" className="btn btn-ghost-success" data-bs-dismiss="modal"><i className="ri-close-line align-bottom"></i> Close</button>
-                                    <a style={{cursor : "pointer"}} type="submit" className="btn btn-primary" id="addNewFolder" onClick={folderSubmit}>Add Folder</a>
+                                    <button type="submit" className="btn btn-primary" id="addNewFolder" >Add Folder</button>
+                                    {/* onClick={folderSubmit} */}
                                 </div>
                             </form>
                         </div>
@@ -637,7 +656,7 @@ dispatch(addFolderFunction(folderName));
                             <div className="mt-2 text-center">
                                 <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style={{width:'100px',height:'100px'}}></lord-icon>
                                 <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                    <h4>Are you sure ?</h4>
+                                    <h4>Are you sure you want to remove  ?</h4>
                                     <p className="text-muted mx-4 mb-0">Are you sure you want to remove this item ?</p>
                                 </div>
                             </div>
@@ -664,13 +683,13 @@ dispatch(addFolderFunction(folderName));
                             <div className="mt-2 text-center">
                                 <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style={{width:'100px',height:'100px'}}></lord-icon>
                                 <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                    <h4>Are you sure ?</h4>
+                                <h4>Are you sure you want to remove <span className='text-danger'>{folderToDelete ? (folderToDelete.folder_name) : ""}</span> ?</h4>
                                     <p className="text-muted mx-4 mb-0">Are you sure you want to remove this folder ?</p>
                                 </div>
                             </div>
                             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
                                 <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn w-sm btn-danger" id="remove-folderList">Yes, Delete It!</button>
+                                <button type="button" className="btn w-sm btn-danger" id="remove-folderList" onClick={removeFolder}>Yes, Delete It!</button>
                             </div>
                         </div>
                     </div>

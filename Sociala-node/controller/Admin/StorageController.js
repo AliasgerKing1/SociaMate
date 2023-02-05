@@ -3,9 +3,8 @@ const Folder = require("../../models/Admin/Storage/Folders");
 const jwt = require("jsonwebtoken");
 
 routes.post("/folder", (req, res)=> {
-   Folder.create(req.body, (error)=> {
-        let obj = {folder_name : req.body.folder_name}
-        res.send(obj);
+   Folder.create(req.body, (error,result)=> {
+        res.send(result);
     })
         })
         routes.get("/folder", (req,res)=> {
@@ -27,12 +26,12 @@ routes.post("/folder", (req, res)=> {
 //         res.send(obj);
 //     })
 //         })
-// routes.delete("/:id", (req,res)=> {
-//     let id = req.params.id;
-//     Folder.deleteMany({_id : id}, (error)=> {
-//         res.send({success : true, status : 200})
-//     })
-// })
+routes.delete("/folder/:id", (req,res)=> {
+    let id = req.params.id;
+    Folder.findOneAndDelete({_id : id}, (error,result)=> {
+        res.send(result)
+    })
+})
 
 // routes.get("/details/:id", (req,res)=> {
 //     let id = req.params.id;

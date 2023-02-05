@@ -1,0 +1,13 @@
+HTTrack3.49-2+htsswf+htsjava launched on Fri, 27 Jan 2023 10:23:28 at https://askbootstrap.com/preview/osahan-eat/admin/index.html +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://askbootstrap.com/preview/osahan-eat/admin/index.html -O1 "C:\My Web Sites\Oshan-Eat-Admin" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+10:24:26	Warning: 	Moved Permanently for https://askbootstrap.com/preview/osahan-eat/admin/Trident/
+10:24:26	Warning: 	File has moved from https://askbootstrap.com/preview/osahan-eat/admin/Trident/ to https://askbootstrap.com/item/osahan-grocery-bootstrap4-responsive-light-template/
+
+HTTrack Website Copier/3.49-2 mirror complete in 58 seconds : 78 links scanned, 76 files written (7130084 bytes overall) [4224693 bytes received at 72839 bytes/sec], 4433112 bytes transferred using HTTP compression in 58 files, ratio 31%, 13.1 requests per connection
+(No errors, 2 warnings, 0 messages)

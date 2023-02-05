@@ -1,0 +1,15 @@
+HTTrack3.49-2+htsswf+htsjava launched on Sun, 05 Feb 2023 09:54:14 at https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html -O1 "C:\My Web Sites\reset=password-fastcart-email-template" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+09:54:18	Error: 	"Not Found" (404) at link https://themes.pixelstrap.com/fastkart/email-templete/www.facebook.com (from https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html)
+09:54:18	Error: 	"Not Found" (404) at link https://themes.pixelstrap.com/fastkart/email-templete/www.twitter.com (from https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html)
+09:54:18	Error: 	"Not Found" (404) at link https://themes.pixelstrap.com/fastkart/email-templete/www.instagram.com (from https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html)
+09:54:18	Error: 	"Not Found" (404) at link https://themes.pixelstrap.com/fastkart/email-templete/www.pinterest.com (from https://themes.pixelstrap.com/fastkart/email-templete/reset-password.html)
+
+HTTrack Website Copier/3.49-2 mirror complete in 4 seconds : 15 links scanned, 10 files written (149118 bytes overall) [144700 bytes received at 36175 bytes/sec], 13769 bytes transferred using HTTP compression in 1 files, ratio 16%, 7.5 requests per connection
+(4 errors, 0 warnings, 0 messages)
