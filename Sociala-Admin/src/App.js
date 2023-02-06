@@ -8,6 +8,7 @@ import UserReducer from './Redux/UserReducer';
 import AdminReducer from './Redux/AdminReducer';
 import TaskDetailsReducer from './Redux/TaskDetailsReducer';
 import FolderReducer from './Redux/FolderReducer';
+import FileReducer from './Redux/FileReducer';
 
 import SocialaAdminRoutes from './routes/SocialaAdminRoutes';
 import { getAdminProfile } from './Services/AdminService/AdminService';
@@ -17,7 +18,8 @@ let rootReducer = combineReducers({
   UserReducer,
   AdminReducer,
   TaskDetailsReducer,
-  FolderReducer
+  FolderReducer,
+  FileReducer,
 })
 let store = configureStore({
 reducer : rootReducer

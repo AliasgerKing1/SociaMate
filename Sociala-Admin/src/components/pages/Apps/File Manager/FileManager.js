@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import {useFormik} from "formik";
 
 import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../../../../Redux/FolderReducer';
 import {useDispatch,useSelector} from "react-redux"
 
 import { addFolder, getFolder,deleteFolder } from '../../../../Services/Storage/FolderService';
+import { addFile,getFile } from '../../../../Services/Storage/FileService';
 
 import FormErrors from "../../../shared/Errors/FormErrors"
 
@@ -14,7 +14,10 @@ import Footer from '../../../shared/Footer/Footer';
 import NotificationModel from "../../../shared/NotificationModel/NotificationModel";
 import RightMenu from '../../../shared/RightMenu/RightMenu';
 import ChooseLayout from "../../../shared/ChooseLayout/ChooseLayout";
+
 import FolderSchema from '../../../../Schemas/AddFolderSchema';
+import FileSchema from "../../../../Schemas/AddFileSchema";
+import { addFileFunction, getFileFunction } from '../../../../Redux/FileReducer';
 
 const initialValues = {
     folder_name : "",
@@ -23,6 +26,8 @@ const initialValues = {
 const FileManager = () => {
     let dispatch = useDispatch();
     let state = useSelector(state=>state.FolderReducer)
+    let state2 = useSelector(state=>state.AdminReducer)
+    let state3 = useSelector(state=>state.FileReducer)
     let [folderToDelete, setFolderToDelete] = useState();
     let {values, handleBlur,handleChange,handleSubmit,touched,errors} = useFormik({
         initialValues : initialValues,
@@ -37,10 +42,16 @@ let getFolderData = async() => {
 let result = await getFolder();
 dispatch(getFolderFunction(result.data));
 }
+let getFileData = async()=> {
+    let result = await getFile();
+    dispatch(getFileFunction(result.data))
+}
 useEffect(()=> {
     if(state.length == 0) {
         getFolderData();
     }
+    getFileData();
+    
 }, [])
 
 let confirmDelete = (folder) => {
@@ -49,6 +60,20 @@ setFolderToDelete(folder);
 let removeFolder = async() => {
 let result = await deleteFolder(folderToDelete._id);
 dispatch(deleteFolderFunction(result.data));
+}
+let form = new FormData();
+let Image = (e) => {
+    form.append("photo",e.target.files[0]);
+}
+let obj = {
+    username : state2.username,
+    image : ""
+}
+let addImg = async() => {
+    form.append("data",JSON.stringify(obj))
+   let result = await addFile(form);
+   dispatch(addFileFunction(result.data));
+   console.log(result.data)
 }
   return (
     <>
@@ -247,7 +272,42 @@ dispatch(deleteFolderFunction(result.data));
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
+                                                {
+                                                state3.map((x,n)=> {
+                                                    let classes = "";
+                                                    let original_name = x.image;
+                                                    let arr = original_name.split(".");
+                                                    let ext = arr[arr.length-1];
+                                                    if(ext == "jpg" || ext == "JPG" || ext == "png" || ext == "PNG") {
+                                                        classes ="ri-gallery-fill text-success"
+                                                    }
+                                                    else if(ext == "pdf" || ext == "PDF") {
+                                                        classes= "ri-file-pdf-fill text-danger";
+                                                    }
+                                                    else if(ext == "docx" || ext == "DOCX") {
+                                                        classes= "ri-file-word-fill text-primary";
+                                                    }
+                                                    else if(ext == "pptx" || ext == "PPTX") {
+                                                        classes= "ri-file-ppt-2-fill text-danger";
+                                                    }
+                                                    return(
+                                                        <tr key={n}>
+                                                        <td className="fw-medium">01</td>
+                                                        <td><i className={"align-bottom me-2 " + classes}></i> {x.image}</td>
+                                                        <td>Industrial Designer</td>
+                                                        <td>10, Nov 2021</td>
+                                                        <td><span className="badge badge-soft-success">Active</span></td>
+                                                        <td>
+                                                            <div className="hstack gap-3 fs-15">
+                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                                                            </div>
+                                                        </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                                }
+{/*                                                 <tr>
                                                         <td className="fw-medium">01</td>
                                                         <td><i className="ri-gallery-fill align-bottom text-success me-2"></i> Annette Black</td>
                                                         <td>Industrial Designer</td>
@@ -298,7 +358,7 @@ dispatch(deleteFolderFunction(result.data));
                                                                 <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
-                                                    </tr>
+                                                    </tr>  */}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -608,7 +668,7 @@ dispatch(deleteFolderFunction(result.data));
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
                                     <button type="button" className="btn btn-ghost-success" data-bs-dismiss="modal"><i className="ri-close-line align-bottom"></i> Close</button>
-                                    <button type="submit" className="btn btn-primary" id="addNewFolder" >Add Folder</button>
+                                    <button type="submit" className="btn btn-primary" id="addNewFolder" data-bs-dismiss="modal">Add Folder</button>
                                     {/* onClick={folderSubmit} */}
                                 </div>
                             </form>
@@ -627,16 +687,16 @@ dispatch(deleteFolderFunction(result.data));
                             <button type="button" className="btn-close" data-bs-dismiss="modal" id="addFileBtn-close" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            <form autoComplete="off" className="needs-validation createfile-form" id="createfile-form" noValidate>
+                            <form autoComplete="off" className="needs-validation createfile-form" id="createfile-form">
                                 <div className="mb-4">
                                     <label htmlFor="filename-input" className="form-label">File Name</label>
-                                    <input type="text" className="form-control" id="filename-input" value="" required placeholder="Enter file name" />
-                                    <div className="invalid-feedback">Please enter a file name.</div>
+                                    <input type="file"  className="form-control" id="filename-input" placeholder="Enter file name" onChange={Image} />
                                     <input type="hidden" className="form-control" id="fileid-input" value="" placeholder="Enter file name" />
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
                                     <button type="button" className="btn btn-ghost-success" data-bs-dismiss="modal"><i className="ri-close-line align-bottom"></i> Close</button>
-                                    <button type="submit" className="btn btn-primary" id="addNewFile">Create</button>
+                                    <a style={{cursor : 'pointer'}} className="btn btn-primary" id="addNewFile" data-bs-dismiss="modal" onClick={addImg}>Create</a>
+                                    
                                 </div>
                             </form>
                         </div>

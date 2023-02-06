@@ -1,6 +1,10 @@
 const routes = require("express").Router();
 const Folder = require("../../models/Admin/Storage/Folders");
+const File = require("../../models/Admin/Storage/Files")
+const randstr = require("random-string");
+const path = require("path");
 const jwt = require("jsonwebtoken");
+
 
 routes.post("/folder", (req, res)=> {
    Folder.create(req.body, (error,result)=> {
@@ -12,20 +16,6 @@ routes.post("/folder", (req, res)=> {
                 res.send(result);
             })
         })
-// routes.put("/:id", (req, res)=> {
-//     let id = req.params.id;
-//    Folder.updateMany({_id : id},{$push:{innerData : req.body}}, (error)=> {
-//         let obj = {
-//             projectname : req.body.projectname,
-//         tasktitle : req.body.tasktitle,
-//         taskdescription : req.body.taskdescription,
-//         duedate : req.body.duedate,
-//         tags : req.body.tags,
-//         tasksprogress : req.body.tasksprogress
-//         }
-//         res.send(obj);
-//     })
-//         })
 routes.delete("/folder/:id", (req,res)=> {
     let id = req.params.id;
     Folder.findOneAndDelete({_id : id}, (error,result)=> {
@@ -33,10 +23,37 @@ routes.delete("/folder/:id", (req,res)=> {
     })
 })
 
-// routes.get("/details/:id", (req,res)=> {
-//     let id = req.params.id;
-//     Folder.find({_id : id }, (error,result)=> {
-//         res.send(result[0]);
-//     })
-// })
+
+
+
+
+
+// ---------------------------------File Area----------------------------
+
+routes.post("/file", (req,res)=> {
+    let body = JSON.parse(req.body.data);
+    let image = req.files.photo;
+    randorm_string = randstr({length : 25 });
+    let original_name = image.name;
+    let arr = original_name.split(".");
+    let ext = arr[arr.length-1];
+    let new_name = randorm_string + "." + ext;
+    body.image = new_name;
+    image.mv(path.resolve() + "/assets/files/" + new_name, (error,result)=> {
+        File.create(body, (error)=> {
+            let obj = {image : new_name, username : body.username};
+            res.send(obj);
+     })
+    })
+})
+
+routes.get("/file", (req,res)=> {
+    File.find({}, (error,result)=> {
+        res.send(result)
+    })
+})
+
+
+
+
 module.exports = routes;
