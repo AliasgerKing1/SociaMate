@@ -48,8 +48,15 @@ routes.post("/file", (req,res)=> {
 })
 
 routes.get("/file", (req,res)=> {
-    File.find({}, (error,result)=> {
+    File.find({}).limit(5).sort({id : -1}).exec((error,result)=> {
         res.send(result)
+    })
+})
+
+routes.delete("/file/:id", (req,res)=> {
+    let id = req.params.id;
+    File.findOneAndDelete({_id : id}, (error,result)=> {
+        res.send(result);
     })
 })
 

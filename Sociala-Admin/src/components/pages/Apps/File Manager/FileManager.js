@@ -5,7 +5,7 @@ import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../.
 import {useDispatch,useSelector} from "react-redux"
 
 import { addFolder, getFolder,deleteFolder } from '../../../../Services/Storage/FolderService';
-import { addFile,getFile } from '../../../../Services/Storage/FileService';
+import { addFile,deleteFile,getFile } from '../../../../Services/Storage/FileService';
 
 import FormErrors from "../../../shared/Errors/FormErrors"
 
@@ -17,7 +17,7 @@ import ChooseLayout from "../../../shared/ChooseLayout/ChooseLayout";
 
 import FolderSchema from '../../../../Schemas/AddFolderSchema';
 import FileSchema from "../../../../Schemas/AddFileSchema";
-import { addFileFunction, getFileFunction } from '../../../../Redux/FileReducer';
+import { addFileFunction, deleteFileFunction, getFileFunction } from '../../../../Redux/FileReducer';
 
 const initialValues = {
     folder_name : "",
@@ -28,7 +28,10 @@ const FileManager = () => {
     let state = useSelector(state=>state.FolderReducer)
     let state2 = useSelector(state=>state.AdminReducer)
     let state3 = useSelector(state=>state.FileReducer)
-    let [folderToDelete, setFolderToDelete] = useState();
+    let [folderToDelete, setFolderToDelete ] = useState();
+    let [renameNum, setRenameNum] = useState();
+    let [checkRename, setCheckRename] = useState(false);
+    let [fileToDelete, setFileToDelete] = useState();
     let {values, handleBlur,handleChange,handleSubmit,touched,errors} = useFormik({
         initialValues : initialValues,
         validationSchema : FolderSchema,
@@ -73,7 +76,14 @@ let addImg = async() => {
     form.append("data",JSON.stringify(obj))
    let result = await addFile(form);
    dispatch(addFileFunction(result.data));
-   console.log(result.data)
+}
+
+let confirmFileDelete = (file) => {
+setFileToDelete(file);
+}
+let removeFile = async() => {
+    let result = await deleteFile(fileToDelete._id);
+    dispatch(deleteFileFunction(result.data));
 }
   return (
     <>
@@ -230,7 +240,8 @@ let addImg = async() => {
                                                         <div className="mb-2">
                                                             <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                                         </div>
-                                                        <h6 className="fs-15 folder-name">{x.folder_name}</h6>
+                                                        {checkRename == true ? (<input type="text" class="form-control" id="valueInput" defualtValue={x.folder_name} />) : (<h6 className="fs-15 folder-na me">{x.folder_name}</h6>)}
+                                                        
                                                     </div>
                                                     <div className="hstack mt-4 text-muted">
                                                         <span className="me-auto"><b>349</b> Files</span>
@@ -265,7 +276,7 @@ let addImg = async() => {
                                                     <tr>
                                                         <th scope="col">ID</th>
                                                         <th scope="col">File Name</th>
-                                                        <th scope="col">Job Title</th>
+                                                        <th scope="col">Admin Name</th>
                                                         <th scope="col">Date</th>
                                                         <th scope="col">Status</th>
                                                         <th scope="col">Action</th>
@@ -278,29 +289,41 @@ let addImg = async() => {
                                                     let original_name = x.image;
                                                     let arr = original_name.split(".");
                                                     let ext = arr[arr.length-1];
-                                                    if(ext == "jpg" || ext == "JPG" || ext == "png" || ext == "PNG") {
+                                                    if(ext === "jpg" || ext === "JPG") {
                                                         classes ="ri-gallery-fill text-success"
                                                     }
-                                                    else if(ext == "pdf" || ext == "PDF") {
+                                                    else if(ext === "pdf" || ext === "PDF") {
                                                         classes= "ri-file-pdf-fill text-danger";
                                                     }
-                                                    else if(ext == "docx" || ext == "DOCX") {
-                                                        classes= "ri-file-word-fill text-primary";
+                                                    else if(ext === "docx" || ext === "DOCX") {
+                                                        classes= "ri-file-text-fill text-primary";
                                                     }
-                                                    else if(ext == "pptx" || ext == "PPTX") {
+                                                    else if(ext === "pptx" || ext === "PPTX") {
                                                         classes= "ri-file-ppt-2-fill text-danger";
+                                                    }        
+                                                    else if(ext === "png" || ext === "PNG") {
+                                                        classes ="ri-gallery-fill text-secondary"
+                                                    }
+                                                    else if(ext === "svg" || ext === "SVG") {
+                                                        classes ="ri-gallery-fill text-dark"
+                                                    }
+                                                    else if(ext === "xlsx" || ext === "XLSX") {
+                                                        classes ="ri-file-excel-fill text-success"
+                                                    }
+                                                    else if(ext === "zip" || ext === "ZIP" || ext === "rar" || ext == "RAR") {
+                                                        classes ="ri-file-zip-fill text-warning"
                                                     }
                                                     return(
                                                         <tr key={n}>
-                                                        <td className="fw-medium">01</td>
+                                                        <td className="fw-medium">{x.id}</td>
                                                         <td><i className={"align-bottom me-2 " + classes}></i> {x.image}</td>
-                                                        <td>Industrial Designer</td>
+                                                        <td>{x.username}</td>
                                                         <td>10, Nov 2021</td>
                                                         <td><span className="badge badge-soft-success">Active</span></td>
                                                         <td>
                                                             <div className="hstack gap-3 fs-15">
                                                                 <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
-                                                                <a href="#;" className="link-danger"><i className="ri-delete-bin-5-line"></i></a>
+                                                                <a href="#;" className="link-danger" data-bs-target="#removeFileItemModal" data-bs-toggle="modal"  onClick={()=> confirmFileDelete(x)}><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
                                                         </tr>
@@ -449,10 +472,10 @@ let addImg = async() => {
                                                 <li className="page-item disabled">
                                                     <a href="#" className="page-link">←</a>
                                                 </li>
-                                                <li className="page-item">
+                                                <li className="page-item active">
                                                     <a href="#" className="page-link">1</a>
                                                 </li>
-                                                <li className="page-item active">
+                                                <li className="page-item">
                                                     <a href="#" className="page-link">2</a>
                                                 </li>
                                                 <li className="page-item">
@@ -716,13 +739,13 @@ let addImg = async() => {
                             <div className="mt-2 text-center">
                                 <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style={{width:'100px',height:'100px'}}></lord-icon>
                                 <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                    <h4>Are you sure you want to remove  ?</h4>
+                                    <h4>Are you sure you want to remove <span className='text-danger'>{fileToDelete ? (fileToDelete.image) : ""}</span> ?</h4>
                                     <p className="text-muted mx-4 mb-0">Are you sure you want to remove this item ?</p>
                                 </div>
                             </div>
                             <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
                                 <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn w-sm btn-danger" id="remove-fileitem">Yes, Delete It!</button>
+                                <button type="button" className="btn w-sm btn-danger" id="remove-fileitem" onClick={removeFile} data-bs-dismiss="modal">Yes, Delete It!</button>
                             </div>
                         </div>
                     </div>
