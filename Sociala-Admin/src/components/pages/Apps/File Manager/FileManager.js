@@ -4,6 +4,8 @@ import {useFormik} from "formik";
 import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../../../../Redux/FolderReducer';
 import {useDispatch,useSelector} from "react-redux"
 
+import {Link} from "react-router-dom"
+
 import { addFolder, getFolder,deleteFolder } from '../../../../Services/Storage/FolderService';
 import { addFile,deleteFile,getFile } from '../../../../Services/Storage/FileService';
 
@@ -29,7 +31,7 @@ const FileManager = () => {
     let state2 = useSelector(state=>state.AdminReducer)
     let state3 = useSelector(state=>state.FileReducer)
     let [folderToDelete, setFolderToDelete ] = useState();
-    let [renameNum, setRenameNum] = useState();
+    let [site, setSite] = useState("");
     let [checkRename, setCheckRename] = useState(false);
     let [fileToDelete, setFileToDelete] = useState();
     let {values, handleBlur,handleChange,handleSubmit,touched,errors} = useFormik({
@@ -70,7 +72,8 @@ let Image = (e) => {
 }
 let obj = {
     username : state2.username,
-    image : ""
+    image : "",
+    site: site
 }
 let addImg = async() => {
     form.append("data",JSON.stringify(obj))
@@ -101,6 +104,7 @@ let removeFile = async() => {
         {/* <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== --> */}
+
         <div className="main-content">
 
             <div className="page-content">
@@ -229,7 +233,7 @@ let removeFile = async() => {
                                                                 <i className="ri-more-2-fill fs-16 align-bottom"></i>
                                                             </button>
                                                             <ul className="dropdown-menu dropdown-menu-end">
-                                                                <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
+                                                                <li><Link className="dropdown-item view-item-btn" to={"/admin/folder/details/" + x._id}>Open</Link></li>
                                                                 <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
                                                                 <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button" onClick={()=> confirmDelete(x)}>Delete</a></li>
                                                             </ul>
@@ -274,12 +278,12 @@ let removeFile = async() => {
                                             <table className="table table-borderless align-middle table-nowrap mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">ID</th>
+                                                        <th scope="col">SR NO.</th>
                                                         <th scope="col">File Name</th>
                                                         <th scope="col">Admin Name</th>
                                                         <th scope="col">Date</th>
-                                                        <th scope="col">Status</th>
-                                                        <th scope="col">Action</th>
+                                                        <th scope="col">Site</th>
+                                                        <th scope="col">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -315,14 +319,23 @@ let removeFile = async() => {
                                                     }
                                                     return(
                                                         <tr key={n}>
-                                                        <td className="fw-medium">{x.id}</td>
+                                                        <td className="fw-medium">{n + 1}</td>
                                                         <td><i className={"align-bottom me-2 " + classes}></i> {x.image}</td>
                                                         <td>{x.username}</td>
                                                         <td>10, Nov 2021</td>
-                                                        <td><span className="badge badge-soft-success">Active</span></td>
+                                                        <td><span className="badge badge-soft-success">{x.site}</span></td>
                                                         <td>
                                                             <div className="hstack gap-3 fs-15">
-                                                                <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                            <div className="dropdown">
+                                                            <button className="btn btn-ghost-primary btn-icon dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <a href="#;" className="link-primary"><i className="ri-settings-4-line"></i></a>
+                                                            </button>
+                                                            <ul className="dropdown-menu dropdown-menu-end">
+                                                                <li><a className="dropdown-item view-item-btn" href="#;">View</a></li>
+                                                                <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
+                                                            </ul>
+                                                        </div>
+                                                              
                                                                 <a href="#;" className="link-danger" data-bs-target="#removeFileItemModal" data-bs-toggle="modal"  onClick={()=> confirmFileDelete(x)}><i className="ri-delete-bin-5-line"></i></a>
                                                             </div>
                                                         </td>
@@ -686,7 +699,6 @@ let removeFile = async() => {
                                     <label htmlFor="foldername-input" className="form-label">Folder Name</label>
                                     <input type="text" name='folder_name' className= {"form-control " + (errors.folder_name && touched.folder_name? "is-invalid" : "")} onBlur={handleBlur} id="foldername-input" placeholder="Enter folder name" onChange={handleChange}/>
                                     <FormErrors errMsg={errors.folder_name} touched={touched.folder_name}/>
-                                    {/* setFolderName({...folderName,folder_name : e.target.value}) */}
                                     {/* <input type="hidden" className="form-control" id="folderid-input" value="" placeholder="Enter folder name" /> */}
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
@@ -712,9 +724,11 @@ let removeFile = async() => {
                         <div className="modal-body">
                             <form autoComplete="off" className="needs-validation createfile-form" id="createfile-form">
                                 <div className="mb-4">
+                                <label htmlFor="site-input" className="form-label">Site</label>
+                                    <input type="text" className="form-control mb-2" id="site-input" name='site' placeholder="Enter site of use" onChange={(e)=> setSite(e.target.value)} />
                                     <label htmlFor="filename-input" className="form-label">File Name</label>
                                     <input type="file"  className="form-control" id="filename-input" placeholder="Enter file name" onChange={Image} />
-                                    <input type="hidden" className="form-control" id="fileid-input" value="" placeholder="Enter file name" />
+                                   
                                 </div>
                                 <div className="hstack gap-2 justify-content-end">
                                     <button type="button" className="btn btn-ghost-success" data-bs-dismiss="modal"><i className="ri-close-line align-bottom"></i> Close</button>

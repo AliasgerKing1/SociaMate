@@ -24,6 +24,7 @@ import SettingLayouts from '../../Layouts/SettingLayouts/SettingLayouts';
 import SettingRoutes from './SettingRoutes/SettingRoutes';
 import TaskDetails from '../../components/pages/TaskBoard/TaskDetails/TaskDetails';
 import FileManager from '../../components/pages/Apps/File Manager/FileManager';
+import FolderDetails from '../../components/pages/Apps/File Manager/folderdetails/FolderDetails';
 
 
 let adminRoutes = [
@@ -102,6 +103,10 @@ let adminRoutes = [
   {
     path : "filemanager",
     element: <FileManager />
+  },
+  {
+    path : "folder/details/:id",
+    element: <FolderDetails/>
   },
   {
     path : "setting/auth",

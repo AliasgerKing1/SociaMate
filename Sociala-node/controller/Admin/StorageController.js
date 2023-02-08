@@ -41,7 +41,7 @@ routes.post("/file", (req,res)=> {
     body.image = new_name;
     image.mv(path.resolve() + "/assets/files/" + new_name, (error,result)=> {
         File.create(body, (error)=> {
-            let obj = {image : new_name, username : body.username};
+            let obj = {image : new_name, username : body.username, site : body.site};
             res.send(obj);
      })
     })
