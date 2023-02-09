@@ -30,9 +30,6 @@ const FolderDetails = () => {
     let state = useSelector(state=>state.FolderReducer)
     let state2 = useSelector(state=>state.AdminReducer)
     let state3 = useSelector(state=>state.FileReducer)
-    const [clicked, setClicked] = useState(false);
-    const [xPos, setXPos] = useState("");
-    const [yPos, setYPos] = useState("");
     let [folderToDelete, setFolderToDelete ] = useState();
     let [site, setSite] = useState("");
     let [checkRename, setCheckRename] = useState(false);
@@ -61,13 +58,6 @@ const FolderDetails = () => {
     getFileData();
     
     }, [])
-    useEffect(() => {
-        const handleClick = () => setClicked(false);
-        window.addEventListener("click", handleClick);
-        return () => {
-          window.removeEventListener("click", handleClick);
-        };
-      }, []);
     let confirmDelete = (folder) => {
     setFolderToDelete(folder);
     }
@@ -97,6 +87,7 @@ const FolderDetails = () => {
     let result = await deleteFile(fileToDelete._id);
     dispatch(deleteFileFunction(result.data));
     }
+
   return (
         <>
     
@@ -116,11 +107,9 @@ const FolderDetails = () => {
             <div className="main-content" 
                 onContextMenu={(e) => {
         e.preventDefault();
-        setClicked("true")
       }}>
                 <div className="page-content">
                     <div className="container-fluid">
-    
                         <div className="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
                             <div className="file-manager-sidebar">
                                 <div className="p-3 d-flex flex-column h-100">
@@ -132,6 +121,7 @@ const FolderDetails = () => {
                                         <i className="ri-search-2-line search-icon"></i>
                                     </div>
                                     <div className="mt-3 mx-n4 px-4 file-menu-sidebar-scroll" data-simplebar>
+                                    
                                         <ul className="list-unstyled file-manager-menu">
                                             <li>
                                                 <a data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
@@ -275,10 +265,6 @@ const FolderDetails = () => {
 
 
                                         {/* <!--end row--> */}
-                                    {
-                                        clicked ? (<CoustomContextMenu />) : ""
-                                     
-                                    }   
                                     </div>
                                     <div className="d-flex align-items-center mb-3">
                                         <h5 className="flex-grow-1 fs-16 mb-0" id="filetype-title">Files</h5>
@@ -286,8 +272,7 @@ const FolderDetails = () => {
                                         </div>
                                         
                                     </div>
-                                    <div>
-                                    </div>
+                        <CoustomContextMenu />
                                 </div>
                             </div>
                         </div>

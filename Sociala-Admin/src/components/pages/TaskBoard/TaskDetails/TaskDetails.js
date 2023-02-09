@@ -10,6 +10,7 @@ import Footer from "../../../shared/Footer/Footer";
 import NotificationModel from "../../../shared/NotificationModel/NotificationModel";
 import RightMenu from "../../../shared/RightMenu/RightMenu";
 import ChooseLayout from "../../../shared/ChooseLayout/ChooseLayout";
+import Timer from '../../../shared/Task/Timer';
 
 const TaskDetails = () => {
     let params = useParams();
@@ -19,22 +20,15 @@ const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-  let [timerCheck, setTimerCheck] = useState(false);
-      const deadline = Date();
-  const getTime = () => {
-    if(timerCheck == true) {    
-        const time = Date.parse(deadline) - Date.now();
-        setDays(Math.floor(time / (1000 * 60 * 60 * 24)));
-        setHours(Math.floor((time / (1000 * 60 * 60)) % 24));
-        setMinutes(Math.floor((time / 1000 / 60) % 60));
-        setSeconds(Math.floor((time / 1000) % 60));
-    }
-};
-  useEffect(() => {
-    const interval = setInterval(() => getTime(deadline), 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+let timer;
+  useEffect(() => {
+
+timer = setInterval(()=> {
+setSeconds(seconds + 1)
+}, 1000)
+
+  });
     let id;
     let getDetails = async() => {
          id = params.id;
@@ -84,21 +78,7 @@ const [days, setDays] = useState(0);
 
                     <div className="row">
                         <div className="col-xxl-3">
-                            <div className="card">
-                                <div className="card-body text-center">
-                                    <h6 className="card-title mb-3 flex-grow-1 text-start">Time Tracker</h6>
-                                    <div className="mb-2">
-                                        <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop" colors="primary:#405189,secondary:#02a8b5" style={{width: '90px', height: '90px'}}>
-                                        </lord-icon>
-                                    </div>
-                                    <h3 className="mb-1"><span id="hour">{hours < 1 ? + hours : hours}</span> hrs <span id="minute">{minutes < 1 ? + minutes : minutes}</span> min <span id="second">{seconds < 1 ? + seconds : seconds}</span> sec</h3>
-                                    <h5 className="fs-14 mb-4">Profile Page Tracker</h5>
-                                    <div className="hstack gap-2 justify-content-center">
-                                        <button className="btn btn-danger btn-sm" onClick={()=>setTimerCheck(false)}><i className="ri-stop-circle-line align-bottom me-1"></i> Stop</button>
-                                        <button className="btn btn-success btn-sm"  onClick={()=>setTimerCheck(true)}><i className="ri-play-circle-line align-bottom me-1"></i> Start</button>
-                                    </div>
-                                </div>
-                            </div>
+<Timer/>
                             {/* <!--end card--> */}
                             <div className="card mb-3">
                                 <div className="card-body">
