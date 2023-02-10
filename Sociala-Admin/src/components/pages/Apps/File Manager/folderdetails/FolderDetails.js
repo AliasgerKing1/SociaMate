@@ -85,6 +85,7 @@ const FolderDetails = () => {
     }
     let removeFile = async() => {
     let result = await deleteFile(fileToDelete._id);
+    console.log(result.data)
     dispatch(deleteFileFunction(result.data));
     }
 
@@ -205,7 +206,7 @@ const FolderDetails = () => {
                                                 <div className="d-flex gap-2 align-items-start">
                                                     <select className="form-control" data-choices data-choices-search-false name="choices-single-default" id="file-type">
                                                         <option value="">File Type</option>
-                                                        <option value="All" selected>All</option>
+                                                        <option value="All">All</option>
                                                         <option value="Video">Video</option>
                                                         <option value="Images">Images</option>
                                                         <option value="Music">Music</option>
@@ -383,7 +384,7 @@ const FolderDetails = () => {
                                 </div>
                                 <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
                                     <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" className="btn w-sm btn-danger" id="remove-folderList" onClick={removeFolder}>Yes, Delete It!</button>
+                                    <button type="button" className="btn w-sm btn-danger" id="remove-folderList" data-bs-dismiss="modal" onClick={removeFolder}>Yes, Delete It!</button>
                                 </div>
                             </div>
                         </div>

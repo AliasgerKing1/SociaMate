@@ -36,6 +36,7 @@ const TaskBoard = () => {
         name : taskBoard,
         innerData : innerData
     }
+    console.log(innerData)
     let handleAdd = ()=> {
         addBoard(obj).then(result=> {
            setBoard(result.data)

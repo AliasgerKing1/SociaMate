@@ -23,7 +23,12 @@ routes.delete("/folder/:id", (req,res)=> {
     })
 })
 
-
+routes.put("/folder/:id", (req,res)=> {
+    let id = req.params.id;
+    Folder.findOneAndUpdate({_id : id},{$push:{data : req.body}}, (error, result)=> {
+        res.send(result);
+    });
+})
 
 
 

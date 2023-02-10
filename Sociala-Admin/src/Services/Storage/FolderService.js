@@ -12,5 +12,8 @@ let getFolder = () => {
 let deleteFolder = (id) => {
     return axios.delete(apiUrl + id);
 }
+let updateFolder = (id, obj) => {
+    return axios.put(apiUrl + id, obj);
+}
 
-export {addFolder,getFolder,deleteFolder}
+export {addFolder,getFolder,deleteFolder,updateFolder}

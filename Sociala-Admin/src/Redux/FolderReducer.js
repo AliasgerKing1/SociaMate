@@ -14,16 +14,26 @@ let folderReducer = createSlice({
         deleteFolderFunction(state,action) {
             let x = 0;
             state.forEach((item,n)=> {
-if(item._id == action.payload) {
+if(item._id == action.payload._id) {
      x = n;
      return
 }
             })
             state.splice(x,1);
             return state;
+        },
+        updateFolderFunction(state, action) {
+            state.forEach((item)=> {
+                if(item._id ===  action.payload._id) {
+                   
+
+                }
+            })
+
+           
         }
     }
 })
 
 export default folderReducer.reducer;
-export const {getFolderFunction, addFolderFunction,deleteFolderFunction} = folderReducer.actions;
+export const {getFolderFunction, addFolderFunction,deleteFolderFunction,updateFolderFunction} = folderReducer.actions;
