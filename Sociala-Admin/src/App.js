@@ -9,6 +9,7 @@ import AdminReducer from './Redux/AdminReducer';
 import TaskDetailsReducer from './Redux/TaskDetailsReducer';
 import FolderReducer from './Redux/FolderReducer';
 import FileReducer from './Redux/FileReducer';
+import DataByIdReducer from "./Redux/GetFolderDataByIdReducer"
 
 import SocialaAdminRoutes from './routes/SocialaAdminRoutes';
 import { getAdminProfile } from './Services/AdminService/AdminService';
@@ -20,6 +21,7 @@ let rootReducer = combineReducers({
   TaskDetailsReducer,
   FolderReducer,
   FileReducer,
+  DataByIdReducer
 })
 let store = configureStore({
 reducer : rootReducer

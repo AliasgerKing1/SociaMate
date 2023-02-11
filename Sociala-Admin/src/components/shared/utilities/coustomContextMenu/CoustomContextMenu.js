@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
+
+import { updateFolderFunction } from '../../../../Redux/FolderReducer';
 
 import {useParams} from "react-router-dom"
-import { updateFolderFunction } from '../../../../Redux/FolderReducer';
+
+
 import { updateFolder } from '../../../../Services/Storage/FolderService';
 
 import "../CoutomContextMenu.css"
@@ -13,7 +16,6 @@ const CoustomContextMenu = () => {
   const [xYPosistion, setXyPosistion] = useState({ x: 0, y: 0 });
   const [chosen, setChosen] = useState();
   const [folderName, setFolderName] = useState("");
-  const [folderNameArr, setFolderNameArr] = useState([]);
   const showNav = (event) => {
     event.preventDefault();
     setContext(false);

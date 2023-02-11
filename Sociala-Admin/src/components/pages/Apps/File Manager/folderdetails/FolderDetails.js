@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {useFormik} from "formik";
-
 import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../../../../../Redux/FolderReducer';
 import { addFileFunction, deleteFileFunction, getFileFunction } from '../../../../../Redux/FileReducer';
+import { getDataById } from '../../../../../Redux/GetFolderDataByIdReducer';
+
 import {useDispatch,useSelector} from "react-redux"
 
 import { addFolder, getFolder,deleteFolder } from '../../../../../Services/Storage/FolderService';
 import { addFile,deleteFile,getFile } from '../../../../../Services/Storage/FileService';
+import { getFolderById } from '../../../../../Services/Storage/FolderService';
 
 import { useParams } from 'react-router-dom';
 import FormErrors from "../../../../shared/Errors/FormErrors";
@@ -19,6 +21,7 @@ import ChooseLayout from "../../../../shared/ChooseLayout/ChooseLayout";
 
 import FolderSchema from '../../../../../Schemas/AddFolderSchema';
 import CoustomContextMenu from '../../../../shared/utilities/coustomContextMenu/CoustomContextMenu';
+import BreadCrumb from '../../../../shared/BreadCrumb/BreadCrumb';
 
 const initialValues = {
     folder_name : "",
@@ -30,6 +33,8 @@ const FolderDetails = () => {
     let state = useSelector(state=>state.FolderReducer)
     let state2 = useSelector(state=>state.AdminReducer)
     let state3 = useSelector(state=>state.FileReducer)
+    let state4 = useSelector(state=>state.DataByIdReducer)
+    let [crumbs, setCrumbs] = useState(['home'])
     let [folderToDelete, setFolderToDelete ] = useState();
     let [site, setSite] = useState("");
     let [checkRename, setCheckRename] = useState(false);
@@ -51,13 +56,37 @@ const FolderDetails = () => {
     let result = await getFile();
     dispatch(getFileFunction(result.data))
     }
-    useEffect(()=> {
-    if(state.length == 0) {
-        getFolderData();
-    }
-    getFileData();
-    
+    let getFolderDataById = async() => {
+        let result = await getFolderById(params.id);
+        dispatch(getDataById(result.data));
+      }
+      useEffect(()=> {
+          if(state.length == 0) {
+              getFolderData();
+            }
+            getFileData();
+            getFolderDataById();
+             
     }, [])
+    useEffect(()=> {
+
+
+if(crumbs.length === 2) {
+    if(crumbs[1]) {
+    crumbs.splice(1,1)
+    console.log(crumbs[1])
+}
+} else {
+    if(state4[0]) {
+        console.log(state4[0])
+        setCrumbs([...crumbs, state4[0].folder_name])
+    }
+}
+           
+       
+    },[state4[0]])
+    
+    // console.log(crumbs)
     let confirmDelete = (folder) => {
     setFolderToDelete(folder);
     }
@@ -85,10 +114,14 @@ const FolderDetails = () => {
     }
     let removeFile = async() => {
     let result = await deleteFile(fileToDelete._id);
-    console.log(result.data)
+    // console.log(result.data)
     dispatch(deleteFileFunction(result.data));
     }
+    // console.log(state[0].data[0].folder)
 
+    const selected = crumb => {
+console.log(crumb)
+    }
   return (
         <>
     
@@ -186,6 +219,9 @@ const FolderDetails = () => {
 
                             <div className="file-manager-content w-100 p-3 py-0">
                                 <div className="mx-n3 pt-4 px-4 file-manager-content-scroll" data-simplebar>
+      <BreadCrumb crumbs={crumbs} selected={selected}/>
+
+
                                     <div id="folder-list" className="mb-2">
                                         <div className="row justify-content-beetwen g-2 mb-3">
     
@@ -217,9 +253,9 @@ const FolderDetails = () => {
                                             {/* <!--end col--> */}
                                         </div>
                                         {/* <!--end row--> */}
-                                        {/* <div className="row" id="folderlist-data">
+                                        <div className="row" id="folderlist-data">
                                         {
-                                            state.map((x,i)=> {
+                                            state4[0] ? (state4[0].data.map((x,i)=> {
                                                 return(
                                                     <div className="col-xxl-3 col-6 folder-card" key={i}>
                                                 <div className="card bg-light shadow-none" id="folder-1">
@@ -245,7 +281,7 @@ const FolderDetails = () => {
                                                             <div className="mb-2">
                                                                 <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
                                                             </div>
-                                                            {checkRename === true ? (<input type="text" className="form-control" id="valueInput" defualtValue={x.folder_name} />) : (<h6 className="fs-15 folder-na me">{x.folder_name}</h6>)}
+                                                            <h6 className="fs-15 folder-na me">{x.folder}</h6>
                                                             
                                                         </div>
                                                         <div className="hstack mt-4 text-muted">
@@ -256,9 +292,64 @@ const FolderDetails = () => {
                                                 </div>
                                             </div>
                                                 )
+                                            })) : ""
+                                         
+                                        }
+    
+                                            {/* <!--end col--> */}
+                                        </div>
+                                        {/* <div className="row" id="folderlist-data">
+                                        {
+                                            state.map((x,i)=> {
+                                                return(
+                                                    <>
+                                                    {
+                                                                 x.data.map((y,b)=>{
+
+                                                return(
+                                                    <div className="col-xxl-3 col-6 folder-card" key={b}>
+                                                <div className="card bg-light shadow-none" id="folder-1">
+                                                    <div className="card-body">
+                                                        <div className="d-flex mb-1">
+                                                            <div className="form-check form-check-danger mb-3 fs-15 flex-grow-1">
+                                                                <input className="form-check-input" type="checkbox" value="" id="folderlistCheckbox_1" />
+                                                                <label className="form-check-label" htmlFor="folderlistCheckbox_1"></label>
+                                                            </div>
+                                                            <div className="dropdown">
+                                                                <button className="btn btn-ghost-primary btn-icon btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i className="ri-more-2-fill fs-16 align-bottom"></i>
+                                                                </button>
+                                                                <ul className="dropdown-menu dropdown-menu-end">
+                                                                    <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
+                                                                    <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
+                                                                    <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button" onClick={()=> confirmDelete(y)}>Delete</a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div className="text-center">
+                                                            <div className="mb-2">
+                                                                <i className="ri-folder-2-fill align-bottom text-warning display-5"></i>
+                                                            </div>
+                                                            <h6 className="fs-15 folder-na me">{y.folder}</h6>
+                                                            
+                                                        </div>
+                                                        <div className="hstack mt-4 text-muted">
+                                                            <span className="me-auto"><b>349</b> Files</span>
+                                                            <span><b>4.10</b>GB</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                                                                       
+                                                )
+                                              })
+                                                            }                                            
+                                            </>
+                                                )
                                             })
                                         }
-     */}
+    */}
                                             {/* <!--end col--> */}
                                         {/* </div> */}
 

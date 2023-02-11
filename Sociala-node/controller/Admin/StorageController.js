@@ -30,7 +30,12 @@ routes.put("/folder/:id", (req,res)=> {
     });
 })
 
-
+routes.get("/folder/:id", (req,res)=> {
+    let id = req.params.id;
+    Folder.find({_id : id}, (error,result)=> {
+         res.send(result);
+     })
+ })
 
 
 // ---------------------------------File Area----------------------------

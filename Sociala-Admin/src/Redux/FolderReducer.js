@@ -25,8 +25,7 @@ if(item._id == action.payload._id) {
         updateFolderFunction(state, action) {
             state.forEach((item)=> {
                 if(item._id ===  action.payload._id) {
-                   
-
+                    return [...state, action.payload]
                 }
             })
 

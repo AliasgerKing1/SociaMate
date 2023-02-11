@@ -30,6 +30,7 @@ const FileManager = () => {
     let state = useSelector(state=>state.FolderReducer)
     let state2 = useSelector(state=>state.AdminReducer)
     let state3 = useSelector(state=>state.FileReducer)
+    let [selectForDelete, setSelectForDelete] = useState(false);
     let [folderToDelete, setFolderToDelete ] = useState();
     let [site, setSite] = useState("");
     let [checkRename, setCheckRename] = useState(false);
@@ -209,8 +210,8 @@ let removeFile = async() => {
                                                     <option value="Music">Music</option>
                                                     <option value="Documents">Documents</option>
                                                 </select>
-    
-                                                <button className="btn btn-primary w-sm create-folder-modal flex-shrink-0" data-bs-toggle="modal" data-bs-target="#createFolderModal"><i className="ri-add-line align-bottom me-1"></i> Create Folders</button>
+    {selectForDelete == true ? ( <button className="btn btn-primary w-sm create-folder-modal flex-shrink-0" data-bs-toggle="modal" data-bs-target="#removeMultipleFolderModal"><i className="ri-delete-bin-line align-bottom me-1"></i> Delete Folders</button>) : ( <button className="btn btn-primary w-sm create-folder-modal flex-shrink-0" data-bs-toggle="modal" data-bs-target="#createFolderModal"><i className="ri-add-line align-bottom me-1"></i> Create Folders</button>)}
+                                               
                                             </div>
                                         </div>
                                         {/* <!--end col--> */}
@@ -771,6 +772,32 @@ let removeFile = async() => {
 
             {/* <!-- removeFileItemModal --> */}
             <div id="removeFolderModal" className="modal fade zoomIn" tabIndex="-1" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-removeFoldermodal"></button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="mt-2 text-center">
+                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style={{width:'100px',height:'100px'}}></lord-icon>
+                                <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                <h4>Are you sure you want to remove <span className='text-danger'>{folderToDelete ? (folderToDelete.folder_name) : ""}</span> ?</h4>
+                                    <p className="text-muted mx-4 mb-0">Are you sure you want to remove this folder ?</p>
+                                </div>
+                            </div>
+                            <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
+                                <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="button" className="btn w-sm btn-danger" id="remove-folderList" onClick={removeFolder}>Yes, Delete It!</button>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <!-- /.modal-content --> */}
+                </div>
+                {/* <!-- /.modal-dialog --> */}
+            </div>
+            {/* <!-- /.modal --> */}
+            {/* <!-- removeMultipleFolderItemModal --> */}
+            <div id="removeMultipleFolderModal" className="modal fade zoomIn" tabIndex="-1" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
