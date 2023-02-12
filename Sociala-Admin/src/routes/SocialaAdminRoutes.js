@@ -1,4 +1,4 @@
-import { useRoutes } from "react-router-dom";
+import { useRoutes,useLocation } from "react-router-dom";
 
 import AdminLayouts from "../Layouts/AdminLayouts/AdminLayouts";
 import Logout from "../components/pages/Authentication/Logout/Logout";
@@ -6,9 +6,9 @@ import adminRoutes from "./Admin/Admin";
 import Login from "../components/pages/Authentication/Login";
 import NotFoundError from "../components/pages/Errors/NotFoundError";
 
-// import Error from "../../components/Sociala/pages/Error/Error";
-
 const SocialaAdminRoutes = () => {
+  // let location = useLocation();
+  // console.log(location)
 const router = useRoutes([
 
     {

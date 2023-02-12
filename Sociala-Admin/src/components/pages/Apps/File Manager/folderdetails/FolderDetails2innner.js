@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {useFormik} from "formik";
-
 import { addFolderFunction, deleteFolderFunction, getFolderFunction } from '../../../../../Redux/FolderReducer';
 import { addFileFunction, deleteFileFunction, getFileFunction } from '../../../../../Redux/FileReducer';
 import { getDataById } from '../../../../../Redux/GetFolderDataByIdReducer';
@@ -11,7 +10,7 @@ import { addFolder, getFolder,deleteFolder } from '../../../../../Services/Stora
 import { addFile,deleteFile,getFile } from '../../../../../Services/Storage/FileService';
 import { getFolderById } from '../../../../../Services/Storage/FolderService';
 
-import { useParams,Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import FormErrors from "../../../../shared/Errors/FormErrors";
 
 import Header from '../../../../shared/Header/Header';
@@ -28,7 +27,7 @@ const initialValues = {
     folder_name : "",
         data : []
 }
-const FolderDetails = () => {
+const FolderDetails2innner = () => {
     let dispatch = useDispatch();
     let params = useParams();
     let state = useSelector(state=>state.FolderReducer)
@@ -75,11 +74,11 @@ const FolderDetails = () => {
 if(crumbs.length === 2) {
     if(crumbs[1]) {
     crumbs.splice(1,1)
-    console.log(crumbs[1])
+    // console.log(crumbs[1])
 }
 } else {
     if(state4[0]) {
-        console.log(state4[0])
+        // console.log(state4[0])
         setCrumbs([...crumbs, state4[0].folder_name])
     }
 }
@@ -119,7 +118,6 @@ if(crumbs.length === 2) {
     dispatch(deleteFileFunction(result.data));
     }
     // console.log(state[0].data[0].folder)
-
 
     const selected = crumb => {
 console.log(crumb)
@@ -255,7 +253,7 @@ console.log(crumb)
                                             {/* <!--end col--> */}
                                         </div>
                                         {/* <!--end row--> */}
-                                        <div className="row" id="folderlist-data">
+                                        {/* <div className="row" id="folderlist-data">
                                         {
                                             state4[0] ? (state4[0].data.map((x,i)=> {
                                                 return(
@@ -272,7 +270,7 @@ console.log(crumb)
                                                                     <i className="ri-more-2-fill fs-16 align-bottom"></i>
                                                                 </button>
                                                                 <ul className="dropdown-menu dropdown-menu-end">
-                                                                    <li><Link className="dropdown-item view-item-btn" to={"/admin/folder/details/" + state4[0]._id + "/next/" + x.folder}>Open</Link></li>
+                                                                    <li><a className="dropdown-item view-item-btn" href="#;">Open</a></li>
                                                                     <li><a className="dropdown-item edit-folder-list" href="#createFolderModal" data-bs-toggle="modal" role="button">Rename</a></li>
                                                                     <li><a className="dropdown-item" href="#removeFolderModal" data-bs-toggle="modal" role="button" onClick={()=> confirmDelete(x)}>Delete</a></li>
                                                                 </ul>
@@ -297,9 +295,9 @@ console.log(crumb)
                                             })) : ""
                                          
                                         }
-    
+     */}
                                             {/* <!--end col--> */}
-                                        </div>
+                                        {/* </div> */}
                                         {/* <div className="row" id="folderlist-data">
                                         {
                                             state.map((x,i)=> {
@@ -366,7 +364,7 @@ console.log(crumb)
                                         </div>
                                         
                                     </div>
-                        <CoustomContextMenu />
+                        {/* <CoustomContextMenu /> */}
                                 </div>
                             </div>
                         </div>
@@ -515,4 +513,4 @@ console.log(crumb)
   )
 }
 
-export default FolderDetails
+export default FolderDetails2innner

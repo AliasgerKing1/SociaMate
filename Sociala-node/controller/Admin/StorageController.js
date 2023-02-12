@@ -36,8 +36,6 @@ routes.get("/folder/:id", (req,res)=> {
          res.send(result);
      })
  })
-
-
 // ---------------------------------File Area----------------------------
 
 routes.post("/file", (req,res)=> {

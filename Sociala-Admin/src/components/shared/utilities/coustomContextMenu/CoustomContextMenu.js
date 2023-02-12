@@ -33,11 +33,14 @@ const CoustomContextMenu = () => {
     setChosen(chosen);
   };
   let obj = {
-    folder : folderName
+    folder : folderName,
+    innerData : []
   }
-  let createFolderFile = async() => {
-      let result = await updateFolder(params.id, obj);
-      dispatch(updateFolderFunction(result.data))
+  let createFolderFile = () => {
+      updateFolder(params.id, obj).then(result=> {
+        console.log(result.data)
+        dispatch(updateFolderFunction(result.data))
+      });
     }
     return (
       <>

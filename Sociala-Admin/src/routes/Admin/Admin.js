@@ -25,6 +25,7 @@ import SettingRoutes from './SettingRoutes/SettingRoutes';
 import TaskDetails from '../../components/pages/TaskBoard/TaskDetails/TaskDetails';
 import FileManager from '../../components/pages/Apps/File Manager/FileManager';
 import FolderDetails from '../../components/pages/Apps/File Manager/folderdetails/FolderDetails';
+import FolderDetails2innner from '../../components/pages/Apps/File Manager/folderdetails/FolderDetails2innner';
 
 
 let adminRoutes = [
@@ -107,6 +108,10 @@ let adminRoutes = [
   {
     path : "folder/details/:id",
     element: <FolderDetails/>
+  },
+  {
+    path : "folder/details/:id/next/:name",
+    element: <FolderDetails2innner/>
   },
   {
     path : "setting/auth",
