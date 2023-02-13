@@ -10,4 +10,5 @@ let getFile = () => {
 let deleteFile = (id) => {
     return axios.delete(apiUrl + id);
 }
+
 export {addFile,getFile,deleteFile}

@@ -59,6 +59,7 @@ const FolderDetails = () => {
     }
     let getFolderDataById = async() => {
         let result = await getFolderById(params.id);
+        console.log(result.data)
         dispatch(getDataById(result.data));
       }
       useEffect(()=> {

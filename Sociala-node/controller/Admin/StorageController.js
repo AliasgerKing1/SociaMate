@@ -25,9 +25,9 @@ routes.delete("/folder/:id", (req,res)=> {
 
 routes.put("/folder/:id", (req,res)=> {
     let id = req.params.id;
-    Folder.findOneAndUpdate({_id : id},{$push:{data : req.body}}, (error, result)=> {
-        res.send(result);
-    });
+   Folder.findOneAndUpdate({_id : id}, {$push : {data : req.body}}, (error,result)=> {
+    res.send(result)
+   })
 })
 
 routes.get("/folder/:id", (req,res)=> {
@@ -67,8 +67,5 @@ routes.delete("/file/:id", (req,res)=> {
         res.send(result);
     })
 })
-
-
-
 
 module.exports = routes;
